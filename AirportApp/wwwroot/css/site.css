@@ -372,3 +372,74 @@ input[type="submit"].btn-primary {
   font-size: 0.85rem !important;
   letter-spacing: 0.5px !important;
 }
+
+/* --- Premium Edit & Back Buttons --- */
+.btn-container-premium {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+/* Edit Button: Elegant pastel gold gradient with soft shadow and micro-interactions */
+.btn-edit-premium {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #F6CE9F 0%, #E2BC8C 100%) !important;
+  color: #5d3f1a !important;
+  padding: 10px 24px !important;
+  border-radius: 30px !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  text-decoration: none !important;
+  border: 1px solid rgba(246, 206, 159, 0.4) !important;
+  box-shadow: 0 4px 14px rgba(246, 206, 159, 0.3) !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: pointer;
+}
+
+.btn-edit-premium:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(246, 206, 159, 0.5) !important;
+  background: linear-gradient(135deg, #E2BC8C 0%, #d4aa73 100%) !important;
+  color: #5d3f1a !important;
+}
+
+.btn-edit-premium:active {
+  transform: translateY(0) !important;
+}
+
+/* Back Button: Clean, minimalist white button with dark grey outline, matching page aesthetics */
+.btn-back-premium {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff !important;
+  color: #4A5568 !important;
+  padding: 10px 24px !important;
+  border-radius: 30px !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  text-decoration: none !important;
+  border: 2px solid #4A5568 !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: pointer;
+}
+
+.btn-back-premium:hover {
+  transform: translateY(-2px) !important;
+  background-color: #4A5568 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 16px rgba(74, 85, 104, 0.3) !important;
+}
+
+.btn-back-premium:active {
+  transform: translateY(0) !important;
+}

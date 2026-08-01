@@ -34,19 +34,18 @@ namespace AirportApp.Services.Payments
                 tip = 0,
                 currency = "USD",
                 reference = reference,
-                clientTransactionId = clientTransactionId,
-                storeId = _settings.StoreId
+                clientTransactionId = clientTransactionId
             };
 
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://pay.payphonetodoesposible.com/api/v2/Payment/Link");
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://pay.payphonetodoesposible.com/api/Links");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _settings.Token);
             request.Content = JsonContent.Create(requestBody);
 
             var response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
-            var json = await response.Content.ReadFromJsonAsync<JsonElement>();
-            return json.GetProperty("payWithCardUrl").GetString() ?? string.Empty;
+            var paymentUrl = await response.Content.ReadFromJsonAsync<string>();
+            return paymentUrl ?? string.Empty;
         }
     }
 }
