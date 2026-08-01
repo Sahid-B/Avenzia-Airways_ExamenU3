@@ -1,0 +1,179 @@
+@model AirportApp.Models.LinqQueriesViewModel
+
+@{
+    ViewData["Title"] = "Reportes LINQ";
+}
+
+<div class="container-fluid mt-4">
+    <h1 class="mb-4 text-primary">Reportes y Estadísticas Generales</h1>
+
+    <!-- 4. Alerta Any -->
+    @if (Model.HasPendingPayments)
+    {
+        <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+            </svg>
+            <div>
+                <strong>Alerta de Pagos:</strong> Existen transacciones con estado 'Pending' que requieren revisión.
+            </div>
+        </div>
+    }
+
+    <!-- 1. Tabla Principal -->
+    <h4 class="mb-3">Listado Detallado de Reservas y Boletos</h4>
+    <div class="row">
+        <div class="col-lg-12 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Filtros de Búsqueda</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Index" method="get" class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Buscar Referencia:</label>
+                            <input type="text" name="searchBookRef" value="@Model.SearchBookRef" class="form-control" placeholder="Ej. A1B2C3" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Monto Mínimo:</label>
+                            <input type="number" step="0.01" name="minAmount" value="@Model.MinAmount" class="form-control" placeholder="Ej. 1000.00" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha (Desde):</label>
+                            <input type="date" name="filterDate" value="@(Model.FilterDate?.ToString("yyyy-MM-dd"))" class="form-control" />
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100 me-2">Buscar</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary w-100">Limpiar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Resultados de Reservas</h5>
+                    <span class="badge bg-primary rounded-pill">Total: @(Model.Bookings?.TotalRecords ?? 0)</span>
+                </div>
+                <div class="card-body p-0 table-responsive">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Referencia</th>
+                                <th>Fecha Reserva</th>
+                                <th>Monto Total</th>
+                                <th class="text-center">Tickets Comprados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Bookings != null && Model.Bookings.Any())
+                            {
+                                foreach (var b in Model.Bookings)
+                                {
+                                    <tr>
+                                        <td><strong>@b.BookRef</strong></td>
+                                        <td>@b.BookDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>@b.TotalAmount.ToString("C")</td>
+                                        <td class="text-center">
+                                            <span class="badge bg-success">@b.TicketsCount</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="4" class="text-center text-muted py-4">No se encontraron reservas con esos filtros.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                
+                @if (Model.Bookings != null)
+                {
+                    <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Página @Model.Bookings.PageIndex de @Model.Bookings.TotalPages</small>
+                        <nav>
+                            <ul class="pagination pagination-sm mb-0">
+                                <li class="page-item @(!Model.Bookings.HasPreviousPage ? "disabled" : "")">
+                                    <a class="page-link" asp-action="Index" 
+                                       asp-route-pageNumber="@(Model.Bookings.PageIndex - 1)" 
+                                       asp-route-searchBookRef="@Model.SearchBookRef"
+                                       asp-route-minAmount="@Model.MinAmount"
+                                       asp-route-filterDate="@Model.FilterDate?.ToString("yyyy-MM-dd")">Anterior</a>
+                                </li>
+                                <li class="page-item @(!Model.Bookings.HasNextPage ? "disabled" : "")">
+                                    <a class="page-link" asp-action="Index" 
+                                       asp-route-pageNumber="@(Model.Bookings.PageIndex + 1)" 
+                                       asp-route-searchBookRef="@Model.SearchBookRef"
+                                       asp-route-minAmount="@Model.MinAmount"
+                                       asp-route-filterDate="@Model.FilterDate?.ToString("yyyy-MM-dd")">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 2. Agrupación -->
+        <div class="col-lg-6 mb-4">
+            <h4 class="mb-3">Resumen Financiero de Pagos</h4>
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Totales por Estado de Transacción</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Estado</th>
+                                <th>Transacciones</th>
+                                <th>Ingreso Total</th>
+                                <th>Promedio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var stat in Model.PaymentStatistics)
+                        {
+                            <tr>
+                                <td>@stat.Status</td>
+                                <td>@stat.Count</td>
+                                <td>@stat.TotalAmount.ToString("C")</td>
+                                <td>@stat.AverageAmount.ToString("C")</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Top Aeropuertos -->
+        <div class="col-lg-6 mb-4">
+            <h4 class="mb-3">Directorio de Aeropuertos</h4>
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Primeros 5 Aeropuertos Registrados</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        @foreach (var airport in Model.TopAirports)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0">@airport.City</h6>
+                                    <small class="text-muted">Código IATA / Interno</small>
+                                </div>
+                                <span class="badge bg-info rounded-pill">@airport.AirportCode</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

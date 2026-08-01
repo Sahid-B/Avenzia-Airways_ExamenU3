@@ -1,0 +1,58 @@
+@model PaginatedList<AirportApp.Models.OrderDetail>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-action="Index" method="get" class="mb-3">
+    <div class="input-group w-50">
+        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Buscar..." />
+        <input type="hidden" name="pageSize" value="@ViewData["PageSize"]" />
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DescSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">Description</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AmountSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">Amount</a>
+            </th>
+            <th>
+                Order
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.OrderId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.OrderDetailId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OrderDetailId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.OrderDetailId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<partial name="_Pagination" />

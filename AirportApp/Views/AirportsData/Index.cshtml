@@ -1,0 +1,70 @@
+@model PaginatedList<AirportApp.Models.AirportsDatum>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-action="Index" method="get" class="mb-3">
+    <div class="input-group w-50">
+        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Buscar..." />
+        <input type="hidden" name="pageSize" value="@ViewData["PageSize"]" />
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">AirportName</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CitySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">City</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CountrySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">Country</a>
+            </th>
+            <th>
+                Coordinates
+            </th>
+            <th>
+                Timezone
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @AirportApp.TranslationHelper.Get(item.AirportName)
+            </td>
+            <td>
+                @AirportApp.TranslationHelper.Get(item.City)
+            </td>
+            <td>
+                @AirportApp.TranslationHelper.Get(item.Country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Coordinates)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Timezone)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AirportCode">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AirportCode">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AirportCode">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<partial name="_Pagination" />

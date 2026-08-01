@@ -1,0 +1,92 @@
+@model AirportApp.Models.Payment
+@{
+    ViewData["Title"] = "Pago Embebido PayPal";
+    var clientId = ViewData["PayPalClientId"] as string;
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow rounded-4">
+                <div class="card-header bg-dark text-white text-center py-3 rounded-top-4" style="background-color: #3F4756 !important;">
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-wallet2 me-2"></i> Pago Embebido PayPal</h4>
+                </div>
+                <div class="card-body p-4 text-center">
+                    <h2 class="text-success fw-bold mb-3">@Model.Amount.ToString("C")</h2>
+                    <p class="text-muted">Orden de Compra: <strong>#@Model.OrderId</strong></p>
+                    <p class="text-muted small">Token PayPal: <span class="font-monospace text-break">@Model.ExternalTransactionId</span></p>
+
+                    <div class="alert alert-info text-start small mb-4 rounded-3">
+                        <i class="bi bi-info-circle-fill me-2 fs-5 align-middle"></i>
+                        Esta pasarela carga los **Botones Oficiales Inteligentes de PayPal** de manera integrada. Haz clic en el botón amarillo para iniciar sesión en tu cuenta Sandbox y pagar.
+                    </div>
+
+                    <!-- Contenedor del Botón Oficial de PayPal -->
+                    <div id="paypal-button-container" class="my-4"></div>
+
+                    <hr class="my-4" />
+
+                    <!-- Botón de Simulación de confirmación para entornos de desarrollo -->
+                    <div class="bg-light p-3 rounded-3 mb-2 text-start border">
+                        <p class="text-secondary small mb-3">Dado que estás corriendo la aplicación localmente, si tienes problemas cargando el SDK o no posees credenciales de prueba, puedes simular la confirmación de pago aquí:</p>
+                        <form asp-action="ConfirmPayPal" method="post">
+                            <input type="hidden" name="paymentId" value="@Model.PaymentId" />
+                            <input type="hidden" name="orderId" value="@Model.ExternalTransactionId" />
+                            <button type="submit" class="btn btn-warning w-100 rounded-pill fw-bold shadow-sm py-2 text-dark">
+                                Simular Confirmación de Pago
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Cargar el SDK Oficial de Botones Inteligentes de PayPal -->
+    <script src="https://www.paypal.com/sdk/js?client-id=@clientId&currency=USD"></script>
+    <script>
+        try {
+            paypal.Buttons({
+                // Pasar el Order ID creado previamente en el servidor
+                createOrder: function(data, actions) {
+                    return "@Model.ExternalTransactionId";
+                },
+                // Al ser aprobado, enviar confirmación al servidor
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        console.log("Pago capturado exitosamente en el cliente:", details);
+
+                        // Crear un formulario dinámico para enviar la aprobación al endpoint de confirmación
+                        var form = document.createElement("form");
+                        form.method = "POST";
+                        form.action = "@Url.Action("ConfirmPayPal", "Payment")";
+
+                        var paymentIdInput = document.createElement("input");
+                        paymentIdInput.type = "hidden";
+                        paymentIdInput.name = "paymentId";
+                        paymentIdInput.value = "@Model.PaymentId";
+
+                        var orderIdInput = document.createElement("input");
+                        orderIdInput.type = "hidden";
+                        orderIdInput.name = "orderId";
+                        orderIdInput.value = data.orderID;
+
+                        form.appendChild(paymentIdInput);
+                        form.appendChild(orderIdInput);
+                        document.body.appendChild(form);
+                        form.submit();
+                    });
+                },
+                onError: function(err) {
+                    console.error("Error en la pasarela de PayPal:", err);
+                }
+            }).render('#paypal-button-container');
+        } catch (err) {
+            console.error("Error cargando los botones de PayPal:", err);
+            document.getElementById("paypal-button-container").innerHTML = 
+                '<div class="text-danger small py-2"><i class="bi bi-exclamation-triangle-fill me-1"></i> No se pudo cargar el SDK de PayPal. Por favor, utiliza el botón de simulación de abajo.</div>';
+        }
+    </script>
+}

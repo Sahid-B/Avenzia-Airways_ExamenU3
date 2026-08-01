@@ -1,0 +1,70 @@
+@model PaginatedList<AirportApp.Models.FlightChangeHistory>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-action="Index" method="get" class="mb-3">
+    <div class="input-group w-50">
+        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Buscar..." />
+        <input type="hidden" name="pageSize" value="@ViewData["PageSize"]" />
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">ChangeDate</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ReasonSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">Reason</a>
+            </th>
+            <th>
+                BookRefNavigation
+            </th>
+            <th>
+                NewFlight
+            </th>
+            <th>
+                OldFlight
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChangeDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reason)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookRefNavigation.BookRef)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NewFlight.FlightId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OldFlight.FlightId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ChangeId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ChangeId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ChangeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<partial name="_Pagination" />

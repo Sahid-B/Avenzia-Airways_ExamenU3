@@ -1,0 +1,47 @@
+@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Verificación de Correo";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card border-0 shadow rounded-4 p-2">
+                <div class="card-header bg-white text-center border-0 pt-4 pb-0">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary-light text-primary rounded-circle mb-3" style="width: 70px; height: 70px; background-color: rgba(126, 145, 179, 0.15);">
+                        <i class="bi bi-envelope-open-fill fs-1" style="color: var(--bs-primary);"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark mb-1">Verificación de Correo</h3>
+                    <p class="text-muted small">Ingresa el código que enviamos a tu dirección de correo electrónico.</p>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" asp-route-email="@Model.Email" asp-route-returnUrl="@Model.ReturnUrl">
+                        <div asp-validation-summary="All" class="text-danger small mb-3 alert alert-danger py-2 rounded-3 border-0" role="alert" style="display: @(ModelState.IsValid ? "none" : "block")"></div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="VerificationCode" class="form-label fw-bold text-secondary text-uppercase small" style="letter-spacing: 0.5px;">Código de 6 Dígitos</label>
+                            <input asp-for="VerificationCode" class="form-control text-center fs-3 fw-bold rounded-3 py-2 font-monospace" 
+                                   placeholder="000000" maxlength="6" autofocus autocomplete="off" />
+                            <span asp-validation-for="VerificationCode" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 rounded-pill py-2.5 fw-bold shadow-sm mb-3">
+                            Activar Cuenta <i class="bi bi-arrow-right-short fs-5 align-middle"></i>
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <p class="text-muted small mb-0">¿No recibiste el correo?</p>
+                        <a asp-page="./ResendEmailConfirmation" class="text-primary fw-bold text-decoration-none small">Reenviar código de activación</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

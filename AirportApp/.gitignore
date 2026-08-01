@@ -1,0 +1,44 @@
+# Ignore environment variables
+.env
+.env.*
+
+# Ignore real appsettings to prevent leaking secrets (important for your rubric!)
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+
+# But DO NOT ignore the example file
+!appsettings.Example.json
+
+## Visual Studio & .NET folders
+bin/
+obj/
+TestResults/
+.vs/
+.vscode/
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## MacOS
+.DS_Store

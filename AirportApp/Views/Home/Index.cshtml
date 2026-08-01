@@ -1,0 +1,76 @@
+@{
+    ViewData["Title"] = "Bienvenido a Avenzia Airways";
+}
+
+<!-- Hero Section -->
+<div class="p-5 mb-4 bg-light rounded-3 position-relative overflow-hidden shadow-sm" style="background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1200') no-repeat center center; background-size: cover; min-height: 480px;">
+    <div class="container-fluid py-5 text-white z-1 position-relative">
+        <div class="d-flex align-items-center mb-3 flex-wrap">
+            <img src="/img/logo1.png" alt="Avenzia Airways Logo" style="height: 75px; width: auto;" class="me-3 bg-white p-2 rounded-3 shadow" />
+            <h1 class="display-3 fw-bold mb-0 text-shadow">Avenzia Airways</h1>
+        </div>
+        <p class="col-md-8 fs-4 text-light text-shadow">Viaja al destino de tus sueños con la mayor comodidad, tarifas competitivas y seguridad de clase mundial.</p>
+        <div class="mt-4">
+            <a asp-controller="Shopping" asp-action="Index" class="btn btn-success btn-lg px-5 py-3 rounded-pill fw-bold shadow">
+                <i class="bi bi-airplane-fill me-2"></i> Reservar un Vuelo
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+            <div style="height: 180px; background: url('https://images.unsplash.com/photo-1540962351504-03099e0a754b?q=80&w=600') no-repeat center center; background-size: cover;"></div>
+            <div class="card-body p-4 text-center">
+                <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-success bg-gradient fs-2 rounded-3 px-3 py-2 mb-3">
+                    <i class="bi bi-cart"></i>
+                </div>
+                <h3 class="fs-4 fw-bold">Comprar Vuelos</h3>
+                <p class="text-muted">Explora nuestras rutas disponibles y reserva tus pasajes con tarifas Economy, Comfort o Business en cuestión de minutos.</p>
+                <a asp-controller="Shopping" asp-action="Index" class="btn btn-outline-success rounded-pill fw-bold px-4 mt-2">
+                    Comprar Ahora
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+            <div style="height: 180px; background: url('https://images.unsplash.com/photo-1483450388369-9ed95738483c?q=80&w=600') no-repeat center center; background-size: cover;"></div>
+            <div class="card-body p-4 text-center">
+                <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-danger bg-gradient fs-2 rounded-3 px-3 py-2 mb-3">
+                    <i class="bi bi-calendar2-range"></i>
+                </div>
+                <h3 class="fs-4 fw-bold">Reprogramar Vuelo</h3>
+                <p class="text-muted">¿Cambiaron tus planes? Consulta tu reserva y busca vuelos alternativos con la misma ruta de manera ágil y rápida.</p>
+                <a asp-controller="FlightReprogramming" asp-action="Index" class="btn btn-outline-danger rounded-pill fw-bold px-4 mt-2">
+                    Reprogramar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+            <div style="height: 180px; background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600') no-repeat center center; background-size: cover;"></div>
+            <div class="card-body p-4 text-center">
+                <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 rounded-3 px-3 py-2 mb-3 text-dark">
+                    <i class="bi bi-star"></i>
+                </div>
+                <h3 class="fs-4 fw-bold">Upgrade de Asiento</h3>
+                <p class="text-muted">Disfruta de beneficios premium. Paga la diferencia tarifaria en línea y asegura tu upgrade directo a clase Business.</p>
+                <a asp-controller="SeatUpgrade" asp-action="Index" class="btn btn-outline-warning text-dark rounded-pill fw-bold px-4 mt-2">
+                    Mejorar Clase
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.85);
+    }
+</style>

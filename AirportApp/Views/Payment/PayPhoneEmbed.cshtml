@@ -1,0 +1,89 @@
+@model AirportApp.Models.Payment
+@{
+    ViewData["Title"] = "Pago Embebido PayPhone";
+    var token = ViewData["Token"] as string;
+    var storeId = ViewData["StoreId"] as string;
+    int amountInCents = (int)Math.Round(Model.Amount * 100, MidpointRounding.AwayFromZero);
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow rounded-4">
+                <div class="card-header bg-dark text-white text-center py-3 rounded-top-4">
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-wallet2 me-2"></i> Pago Embebido PayPhone</h4>
+                </div>
+                <div class="card-body p-4 text-center">
+                    <h2 class="text-success fw-bold mb-3">@Model.Amount.ToString("C")</h2>
+                    <p class="text-muted">Orden de Compra: <strong>#@Model.OrderId</strong></p>
+                    <p class="text-muted small">ID de Transacción: <span class="font-monospace text-break">@Model.ExternalTransactionId</span></p>
+
+                    <div class="alert alert-info text-start small mb-4 rounded-3">
+                        <i class="bi bi-info-circle-fill me-2 fs-5 align-middle"></i>
+                        Esta pasarela carga el **Botón Oficial de PayPhone** de manera integrada. Haz clic en el botón de abajo para pagar con tu cuenta de pruebas o tarjeta de crédito.
+                    </div>
+
+                    <!-- Contenedor del Botón Embebido Oficial de PayPhone -->
+                    <div class="d-flex justify-content-center my-4">
+                        <div id="pp-button"></div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <!-- Botón de Simulación de confirmación para entornos de desarrollo -->
+                    <div class="bg-light p-3 rounded-3 mb-2 text-start">
+                        <p class="text-secondary small mb-3">Dado que estás corriendo la aplicación de forma local, el webhook de PayPhone no podrá enviar la confirmación automáticamente a tu máquina. Si no deseas utilizar el widget, puedes simular la confirmación aquí:</p>
+                        <form asp-action="ConfirmPayPhone" method="post">
+                            <input type="hidden" name="paymentId" value="@Model.PaymentId" />
+                            <button type="submit" class="btn btn-warning w-100 rounded-pill fw-bold shadow-sm py-2">
+                                Simular Confirmación de Pago
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Cargar el SDK Oficial del Botón de PayPhone -->
+    <script src="https://pay.payphonetodoesposible.com/api/button/v2/payphone-payment-button.js"></script>
+    <script>
+        try {
+            payphone.Button({
+                token: "@token",
+                btnLayout: {
+                    storeId: "@storeId"
+                },
+                createOrder: function(actions) {
+                    return actions.prepare({
+                        amount: @amountInCents,
+                        amountWithoutTax: @amountInCents,
+                        currency: "USD",
+                        clientTransactionId: "@Model.ExternalTransactionId"
+                    });
+                },
+                onComplete: function(model, actions) {
+                    console.log("Pago exitoso recibido del botón:", model);
+                    
+                    // Crear un formulario dinámico para enviar la aprobación al endpoint de confirmación
+                    var form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = "@Url.Action("ConfirmPayPhone", "Payment")";
+                    
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "paymentId";
+                    input.value = "@Model.PaymentId";
+                    
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            }).render("#pp-button");
+        } catch (err) {
+            console.error("Error cargando el botón de PayPhone:", err);
+        }
+    </script>
+}

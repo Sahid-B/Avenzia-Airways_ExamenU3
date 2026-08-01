@@ -1,0 +1,120 @@
+@{
+    ViewData["Title"] = "Comparar Vuelos";
+    var ticketNo = ViewData["TicketNo"] as string;
+    var currentFlightId = ViewData["CurrentFlightId"];
+    var newFlightId = ViewData["NewFlightId"];
+    var originalPrice = (decimal)ViewData["OriginalPrice"]!;
+    var newPrice = (decimal)ViewData["NewPrice"]!;
+    var fareDifference = (decimal)ViewData["FareDifference"]!;
+    var penalty = (decimal)ViewData["Penalty"]!;
+    var totalDue = (decimal)ViewData["TotalDue"]!;
+
+    var currentFlight = ViewData["CurrentFlight"] as AirportApp.Models.Timetable;
+    var newFlight = ViewData["NewFlight"] as AirportApp.Models.Timetable;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Comparación y Cotización de Reprogramación</h2>
+
+    <div class="row">
+        <!-- Vuelo Original -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-danger h-100 shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0 text-center">Vuelo Original</h5>
+                </div>
+                <div class="card-body">
+                    <h4 class="text-danger font-monospace text-center mb-3">@currentFlight?.RouteNo</h4>
+                    <p class="mb-2"><strong>ID Vuelo:</strong> @currentFlightId</p>
+                    <p class="mb-2"><strong>Origen:</strong> @currentFlight?.DepartureAirport</p>
+                    <p class="mb-2"><strong>Destino:</strong> @currentFlight?.ArrivalAirport</p>
+                    <p class="mb-2"><strong>Salida:</strong> @currentFlight?.ScheduledDeparture?.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p class="mb-0"><strong>Llegada:</strong> @currentFlight?.ScheduledArrival?.ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+                <div class="card-footer bg-light text-center">
+                    <span class="text-muted">Tarifa Original:</span>
+                    <h5 class="text-dark mb-0">@originalPrice.ToString("C")</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vuelo Nuevo -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-success h-100 shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0 text-center">Vuelo Nuevo</h5>
+                </div>
+                <div class="card-body">
+                    <h4 class="text-success font-monospace text-center mb-3">@newFlight?.RouteNo</h4>
+                    <p class="mb-2"><strong>ID Vuelo:</strong> @newFlightId</p>
+                    <p class="mb-2"><strong>Origen:</strong> @newFlight?.DepartureAirport</p>
+                    <p class="mb-2"><strong>Destino:</strong> @newFlight?.ArrivalAirport</p>
+                    <p class="mb-2"><strong>Salida:</strong> @newFlight?.ScheduledDeparture?.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p class="mb-0"><strong>Llegada:</strong> @newFlight?.ScheduledArrival?.ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+                <div class="card-footer bg-light text-center">
+                    <span class="text-muted">Tarifa del Nuevo Vuelo:</span>
+                    <h5 class="text-dark mb-0">@newPrice.ToString("C")</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desglose de Precios y Cargos -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0 text-primary">Desglose de Cargos Adicionales</h5>
+        </div>
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+                <span>Diferencia de Tarifa (Nuevo pasaje - Pasaje original):</span>
+                <span class="fw-bold">@fareDifference.ToString("C")</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <span>Penalidad de Reprogramación Administrativa:</span>
+                <span class="fw-bold text-danger">@penalty.ToString("C")</span>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-between mb-0">
+                <h4 class="mb-0">Monto Adicional Total a Pagar:</h4>
+                <h4 class="mb-0 text-success fw-bold">@totalDue.ToString("C")</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <a asp-action="SearchFlights" asp-route-ticketNo="@ticketNo" asp-route-currentFlightId="@currentFlightId" class="btn btn-outline-secondary btn-lg">
+            Atrás (Buscar otro vuelo)
+        </a>
+        <div class="d-flex gap-3">
+             <form asp-action="CreateOrder" method="post">
+                <input type="hidden" name="ticketNo" value="@ticketNo" />
+                <input type="hidden" name="currentFlightId" value="@currentFlightId" />
+                <input type="hidden" name="newFlightId" value="@newFlightId" />
+                <input type="hidden" name="provider" value="PayPal" />
+                <button type="submit" class="btn btn-success btn-lg px-3 rounded-pill shadow fw-bold">
+                    <i class="bi bi-link-45deg me-1"></i> PayPal Link
+                </button>
+            </form>
+            <form asp-action="CreateOrder" method="post">
+                <input type="hidden" name="ticketNo" value="@ticketNo" />
+                <input type="hidden" name="currentFlightId" value="@currentFlightId" />
+                <input type="hidden" name="newFlightId" value="@newFlightId" />
+                <input type="hidden" name="provider" value="PayPhone" />
+                <button type="submit" class="btn btn-warning btn-lg px-3 rounded-pill shadow text-dark fw-bold">
+                    <i class="bi bi-link-45deg me-1"></i> PayPhone Link
+                </button>
+            </form>
+            <form asp-action="CreateOrder" method="post">
+                <input type="hidden" name="ticketNo" value="@ticketNo" />
+                <input type="hidden" name="currentFlightId" value="@currentFlightId" />
+                <input type="hidden" name="newFlightId" value="@newFlightId" />
+                <input type="hidden" name="provider" value="PayPalEmbed" />
+                <button type="submit" class="btn btn-dark btn-lg px-3 rounded-pill shadow fw-bold">
+                    <i class="bi bi-credit-card-2-front me-1"></i> PayPal Embebido
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

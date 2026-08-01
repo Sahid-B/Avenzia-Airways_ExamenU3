@@ -1,0 +1,59 @@
+@model AirportApp.Models.Ticket
+
+@{
+    ViewData["Title"] = "Vuelos del Boleto";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Boleto Seleccionado: @Model.TicketNo</h5>
+        </div>
+        <div class="card-body">
+            <p class="mb-1"><strong>Pasajero:</strong> @Model.PassengerName</p>
+            <p class="mb-0"><strong>ID Pasajero:</strong> @Model.PassengerId</p>
+        </div>
+    </div>
+
+    <h4 class="mb-3 text-secondary">Vuelos Asociados a este Boleto</h4>
+
+    <div class="row">
+        @if (Model.TicketFlights != null && Model.TicketFlights.Any())
+        {
+            foreach (var tf in Model.TicketFlights)
+            {
+                <div class="col-md-12 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-dark mb-1">Ruta: <strong>@tf.Flight.RouteNo</strong> (Vuelo ID: @tf.FlightId)</h6>
+                                <p class="mb-1 text-muted">
+                                    Salida programada: @tf.Flight.ScheduledDeparture.ToString("dd/MM/yyyy HH:mm")
+                                </p>
+                                <span class="badge bg-secondary">Clase: @tf.FareConditions</span>
+                                <span class="badge bg-success">Precio: @tf.Amount.ToString("C")</span>
+                            </div>
+                            <div>
+                                <a asp-action="SearchFlights" asp-route-ticketNo="@Model.TicketNo" asp-route-currentFlightId="@tf.FlightId" class="btn btn-warning">
+                                    Reprogramar Vuelo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-warning">No se encontraron vuelos registrados para este boleto.</div>
+            </div>
+        }
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="BookingTickets" asp-route-bookRef="@Model.BookRef" class="btn btn-outline-secondary">
+            Regresar a los Boletos de la Reserva
+        </a>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+@model IEnumerable<AirportApp.Models.Timetable>
+
+@{
+    ViewData["Title"] = "Vuelos Alternativos";
+    var ticketNo = ViewData["TicketNo"] as string;
+    var currentFlightId = ViewData["CurrentFlightId"];
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Seleccionar Vuelo Alternativo</h2>
+        <span class="text-muted">Origen: <strong>@ViewData["DepartureAirportName"]</strong> ➔ Destino: <strong>@ViewData["ArrivalAirportName"]</strong></span>
+    </div>
+
+    <p class="text-secondary">Se muestran vuelos disponibles en fechas posteriores para la misma ruta.</p>
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover table-striped mb-0 align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Ruta</th>
+                    <th>Salida Programada</th>
+                    <th>Llegada Programada</th>
+                    <th>Modelo Avión</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var flight in Model)
+                    {
+                        <tr>
+                            <td><strong>@flight.RouteNo</strong> (ID: @flight.FlightId)</td>
+                            <td>@flight.ScheduledDeparture?.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@flight.ScheduledArrival?.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@flight.AirplaneCode</td>
+                            <td>
+                                <span class="badge bg-success">@flight.Status</span>
+                            </td>
+                            <td class="text-end">
+                                <a asp-action="Compare" 
+                                   asp-route-ticketNo="@ticketNo" 
+                                   asp-route-currentFlightId="@currentFlightId" 
+                                   asp-route-newFlightId="@flight.FlightId" 
+                                   class="btn btn-sm btn-primary">
+                                    Seleccionar y Comparar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">No se encontraron vuelos alternativos programados en fechas futuras.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="SelectTicket" asp-route-ticketNo="@ticketNo" class="btn btn-outline-secondary">
+            Volver a la selección de boleto
+        </a>
+    </div>
+</div>

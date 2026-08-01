@@ -1,0 +1,84 @@
+@model AirportApp.Models.Order
+
+@{
+    ViewData["Title"] = "Comprobante de Pago";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-success text-white rounded-top-4 py-4 text-center">
+                    <i class="bi bi-check-circle-fill display-4 mb-3"></i>
+                    <h2 class="mb-0 fw-bold">¡Pago Exitoso!</h2>
+                    <p class="mb-0 mt-2 text-white-50">Tu reserva ha sido confirmada</p>
+                </div>
+                
+                <div class="card-body p-5">
+                    <div class="row mb-4">
+                        <div class="col-sm-6">
+                            <h6 class="text-muted text-uppercase fw-bold mb-1">Código de Reserva</h6>
+                            <p class="fs-5 fw-bold text-dark">@Model.BookRef</p>
+                        </div>
+                        <div class="col-sm-6 text-sm-end">
+                            <h6 class="text-muted text-uppercase fw-bold mb-1">Fecha de Orden</h6>
+                            <p class="fs-5 text-dark">@(Model.OrderDate?.ToString("dd MMM yyyy, HH:mm") ?? "N/A")</p>
+                        </div>
+                    </div>
+                    
+                    <hr class="mb-4">
+
+                    <h5 class="fw-bold mb-3 text-secondary">Detalles de la Compra</h5>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-borderless align-middle">
+                            <thead class="border-bottom">
+                                <tr>
+                                    <th class="text-muted text-uppercase">Descripción</th>
+                                    <th class="text-muted text-uppercase text-end">Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var detail in Model.OrderDetails)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@detail.Description</td>
+                                        <td class="text-end fw-bold">$@detail.Amount.ToString("F2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="border-top">
+                                <tr>
+                                    <td class="text-end fw-bold fs-5 pt-3">Total Pagado:</td>
+                                    <td class="text-end fw-bold fs-4 text-success pt-3">$@Model.TotalAmount.ToString("F2")</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    @if (Model.Payments.Any())
+                    {
+                        var payment = Model.Payments.First();
+                        <div class="bg-light p-4 rounded-3 border">
+                            <h6 class="fw-bold text-muted mb-3"><i class="bi bi-info-circle"></i> Información de Transacción</h6>
+                            <div class="row text-sm">
+                                <div class="col-6 mb-2">
+                                    <span class="text-muted d-block">ID de Transacción (PayPal)</span>
+                                    <span class="fw-semibold">@payment.ExternalTransactionId</span>
+                                </div>
+                                <div class="col-6 mb-2 text-end">
+                                    <span class="text-muted d-block">Estado</span>
+                                    <span class="badge bg-success">@payment.Status</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="text-center mt-5">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary px-5 rounded-pill me-2">Volver al Inicio</a>
+                        <button onclick="window.print()" class="btn btn-primary px-5 rounded-pill shadow-sm"><i class="bi bi-printer"></i> Imprimir Comprobante</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

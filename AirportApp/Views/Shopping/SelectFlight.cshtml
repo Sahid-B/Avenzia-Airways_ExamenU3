@@ -1,0 +1,111 @@
+@model AirportApp.Models.Flight
+
+@{
+    ViewData["Title"] = "Seleccionar Tarifa";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-header bg-success text-white rounded-top-4 py-3">
+                    <h4 class="mb-0"><i class="bi bi-airplane"></i> Detalles del Vuelo @Model.RouteNo</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-sm-6">
+                            <p class="mb-1 text-muted">Salida Programada</p>
+                            <h5 class="fw-bold">@Model.ScheduledDeparture.ToString("dd MMM yyyy, HH:mm")</h5>
+                        </div>
+                        <div class="col-sm-6 text-sm-end">
+                            <p class="mb-1 text-muted">Llegada Programada</p>
+                            <h5 class="fw-bold">@Model.ScheduledArrival.ToString("dd MMM yyyy, HH:mm")</h5>
+                        </div>
+                    </div>
+                    
+                    <hr />
+
+                    <form asp-action="Checkout" method="post" id="checkoutForm">
+                        <input type="hidden" name="FlightId" value="@Model.FlightId" />
+                        
+                        <h5 class="mb-3 text-secondary">Selecciona tu clase</h5>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <input type="radio" class="btn-check" name="FareCondition" id="economy" value="Economy" autocomplete="off" checked onchange="updatePrice()">
+                                <label class="btn btn-outline-success w-100 p-3 rounded-3 shadow-sm h-100 d-flex flex-column align-items-center justify-content-center" for="economy">
+                                    <i class="bi bi-person-fill fs-3 mb-2"></i>
+                                    <span class="fw-bold">Economy</span>
+                                    <small class="text-muted mt-1">$150.00</small>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="radio" class="btn-check" name="FareCondition" id="comfort" value="Comfort" autocomplete="off" onchange="updatePrice()">
+                                <label class="btn btn-outline-primary w-100 p-3 rounded-3 shadow-sm h-100 d-flex flex-column align-items-center justify-content-center" for="comfort">
+                                    <i class="bi bi-star-fill fs-3 mb-2"></i>
+                                    <span class="fw-bold">Comfort</span>
+                                    <small class="text-muted mt-1">$250.00</small>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="radio" class="btn-check" name="FareCondition" id="business" value="Business" autocomplete="off" onchange="updatePrice()">
+                                <label class="btn btn-outline-dark w-100 p-3 rounded-3 shadow-sm h-100 d-flex flex-column align-items-center justify-content-center" for="business">
+                                    <i class="bi bi-briefcase-fill fs-3 mb-2"></i>
+                                    <span class="fw-bold">Business</span>
+                                    <small class="text-muted mt-1">$350.00</small>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info d-flex align-items-center rounded-3 shadow-sm" role="alert">
+                            <i class="bi bi-info-circle-fill me-3 fs-4"></i>
+                            <div>
+                                El total a pagar será calculado de manera segura en nuestro servidor. 
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-5 bg-light p-3 rounded-3 border">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4 rounded-pill">Volver</a>
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="me-4 text-end">
+                                    <span class="text-muted d-block" style="font-size: 0.9rem;">Total estimado:</span>
+                                    <span class="fs-4 fw-bold text-success" id="totalPriceDisplay">$150.00</span>
+                                </div>
+                                <button type="submit" name="provider" value="PayPal" class="btn btn-success btn-lg px-3 rounded-pill shadow me-2 fw-bold">
+                                    <i class="bi bi-link-45deg"></i> PayPal Link
+                                </button>
+                                <button type="submit" name="provider" value="PayPhone" class="btn btn-warning btn-lg px-3 rounded-pill shadow text-dark fw-bold me-2">
+                                    <i class="bi bi-link-45deg"></i> PayPhone Link
+                                </button>
+                                <button type="submit" name="provider" value="PayPalEmbed" class="btn btn-dark btn-lg px-3 rounded-pill shadow fw-bold">
+                                    <i class="bi bi-credit-card-2-front"></i> PayPal Embebido
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-check:checked + .btn .text-muted {
+        color: rgba(255, 255, 255, 0.75) !important;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        function updatePrice() {
+            var fare = document.querySelector('input[name="FareCondition"]:checked').value;
+            var price = 0;
+            if (fare === 'Economy') price = 150.00;
+            if (fare === 'Comfort') price = 250.00;
+            if (fare === 'Business') price = 350.00;
+            
+            document.getElementById('totalPriceDisplay').innerText = '$' + price.toFixed(2);
+        }
+    </script>
+}

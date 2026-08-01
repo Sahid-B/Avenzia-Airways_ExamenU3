@@ -1,0 +1,81 @@
+@model dynamic
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    var currentFilter = ViewData["CurrentFilter"] as string;
+    var currentSort = ViewData["CurrentSort"] as string;
+    var actionName = ViewContext.RouteData.Values["action"].ToString();
+    var controllerName = ViewContext.RouteData.Values["controller"]?.ToString();
+    var isOrders = controllerName == "Orders";
+}
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <div>
+        <span>Página @Model.PageIndex de @Model.TotalPages</span> |
+        <span>Total de registros: @Model.TotalRecords</span>
+    </div>
+    
+    <div class="d-flex align-items-center">
+        <form asp-action="@actionName" method="get" class="me-3 d-flex">
+            <input type="hidden" name="sortOrder" value="@currentSort" />
+            <input type="hidden" name="currentFilter" value="@currentFilter" />
+            <label class="me-2 align-self-center">Tamaño de página:</label>
+            <select name="pageSize" class="form-select form-select-sm" onchange="this.form.submit()" style="width: auto;">
+                @foreach (var size in new[] { 5, 10, 20, 50, 100 })
+                {
+                    if (Model.PageSize == size)
+                    {
+                        <option value="@size" selected="selected">@size</option>
+                    }
+                    else
+                    {
+                        <option value="@size">@size</option>
+                    }
+                }
+            </select>
+        </form>
+
+        @if (isOrders)
+        {
+            <a asp-action="@actionName"
+               asp-route-sortOrder="@currentSort"
+               asp-route-pageNumber="1"
+               asp-route-currentFilter="@currentFilter"
+               asp-route-pageSize="@Model.PageSize"
+               class="btn btn-outline-secondary btn-sm me-2 @prevDisabled">
+                Primero
+            </a>
+        }
+
+        <a asp-action="@actionName"
+           asp-route-sortOrder="@currentSort"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-currentFilter="@currentFilter"
+           asp-route-pageSize="@Model.PageSize"
+           class="btn btn-outline-secondary btn-sm me-2 @prevDisabled">
+            Anterior
+        </a>
+        
+        <a asp-action="@actionName"
+           asp-route-sortOrder="@currentSort"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-currentFilter="@currentFilter"
+           asp-route-pageSize="@Model.PageSize"
+           class="btn btn-outline-secondary btn-sm @nextDisabled">
+            Siguiente
+        </a>
+
+        @if (isOrders)
+        {
+            <a asp-action="@actionName"
+               asp-route-sortOrder="@currentSort"
+               asp-route-pageNumber="@Model.TotalPages"
+               asp-route-currentFilter="@currentFilter"
+               asp-route-pageSize="@Model.PageSize"
+               class="btn btn-outline-secondary btn-sm ms-2 @nextDisabled">
+                Último
+            </a>
+        }
+    </div>
+</div>

@@ -1,0 +1,374 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+/* Premium Pastel Color System Override */
+:root {
+  --bs-primary: #7E91B3;
+  --bs-primary-rgb: 126, 145, 179;
+  --bs-success: #88BBA7;
+  --bs-success-rgb: 136, 187, 167;
+  --bs-info: #A8D1E7;
+  --bs-info-rgb: 168, 209, 231;
+  --bs-warning: #F6CE9F;
+  --bs-warning-rgb: 246, 206, 159;
+  --bs-danger: #E8A598;
+  --bs-danger-rgb: 232, 165, 152;
+  --bs-dark: #4A5568;
+  --bs-dark-rgb: 74, 85, 104;
+}
+
+/* Button overrides for pastel consistency */
+.btn-primary {
+  background-color: var(--bs-primary) !important;
+  border-color: var(--bs-primary) !important;
+  color: #fff !important;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background-color: #6C7E9C !important;
+  border-color: #6C7E9C !important;
+}
+
+.btn-success {
+  background-color: var(--bs-success) !important;
+  border-color: var(--bs-success) !important;
+  color: #fff !important;
+}
+.btn-success:hover, .btn-success:focus {
+  background-color: #74A592 !important;
+  border-color: #74A592 !important;
+}
+
+.btn-warning {
+  background-color: var(--bs-warning) !important;
+  border-color: var(--bs-warning) !important;
+  color: #5d3f1a !important;
+}
+.btn-warning:hover, .btn-warning:focus {
+  background-color: #E2BC8C !important;
+  border-color: #E2BC8C !important;
+  color: #5d3f1a !important;
+}
+
+.btn-danger {
+  background-color: var(--bs-danger) !important;
+  border-color: var(--bs-danger) !important;
+  color: #fff !important;
+}
+.btn-danger:hover, .btn-danger:focus {
+  background-color: #D39083 !important;
+  border-color: #D39083 !important;
+}
+
+.btn-dark {
+  background-color: var(--bs-dark) !important;
+  border-color: var(--bs-dark) !important;
+  color: #fff !important;
+}
+.btn-dark:hover, .btn-dark:focus {
+  background-color: #373E4D !important;
+  border-color: #373E4D !important;
+}
+
+/* Background utilities overrides */
+.bg-primary { background-color: var(--bs-primary) !important; }
+.bg-success { background-color: var(--bs-success) !important; }
+.bg-info { background-color: var(--bs-info) !important; }
+.bg-warning { background-color: var(--bs-warning) !important; }
+.bg-danger { background-color: var(--bs-danger) !important; }
+.bg-dark { background-color: var(--bs-dark) !important; }
+
+/* Border utilities overrides */
+.border-primary { border-color: var(--bs-primary) !important; }
+.border-success { border-color: var(--bs-success) !important; }
+.border-info { border-color: var(--bs-info) !important; }
+.border-warning { border-color: var(--bs-warning) !important; }
+.border-danger { border-color: var(--bs-danger) !important; }
+
+/* Text utilities overrides */
+.text-primary { color: var(--bs-primary) !important; }
+.text-success { color: var(--bs-success) !important; }
+.text-info { color: var(--bs-info) !important; }
+.text-warning { color: var(--bs-warning) !important; }
+.text-danger { color: var(--bs-danger) !important; }
+
+/* Active state for selector checks */
+.btn-check:checked + .btn-outline-success {
+  background-color: var(--bs-success) !important;
+  border-color: var(--bs-success) !important;
+  color: #fff !important;
+}
+.btn-check:checked + .btn-outline-primary {
+  background-color: var(--bs-primary) !important;
+  border-color: var(--bs-primary) !important;
+  color: #fff !important;
+}
+.btn-check:checked + .btn-outline-dark {
+  background-color: var(--bs-dark) !important;
+  border-color: var(--bs-dark) !important;
+  color: #fff !important;
+}
+
+/* Body and UI Enhancements */
+body {
+  background-color: #f7f9fa;
+  color: #444;
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* --- Premium Global CRUD UI Overrides --- */
+
+/* Page Main Headers */
+main h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--bs-dark);
+  margin-top: 10px;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+/* "Create New" link as a premium button */
+p > a[href*="/Create"], p > a[href*="/create"], p > a[asp-action="Create"] {
+  display: inline-flex !important;
+  align-items: center;
+  background-color: var(--bs-primary) !important;
+  color: #fff !important;
+  padding: 8px 22px !important;
+  border-radius: 30px !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 6px rgba(126, 145, 179, 0.15) !important;
+  transition: all 0.2s ease-in-out !important;
+  margin-bottom: 10px;
+}
+p > a[href*="/Create"]:hover, p > a[href*="/create"]:hover {
+  background-color: #6C7E9C !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 12px rgba(126, 145, 179, 0.25) !important;
+}
+/* Prepend a Bootstrap icon tag via CSS context for "Create New" if no icon */
+p > a[href*="/Create"]::before, p > a[href*="/create"]::before {
+  content: "\f4fe" !important; /* bi-person-plus or bi-plus-circle-fill icon */
+  font-family: "bootstrap-icons" !important;
+  font-size: 1.1rem !important;
+  margin-right: 8px !important;
+  font-weight: normal !important;
+}
+
+/* Modern Input Search Bar Filters */
+.input-group {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.input-group .form-control {
+  border: 1px solid #cbd5e0 !important;
+  padding: 10px 16px !important;
+  font-size: 0.95rem !important;
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+}
+.input-group .btn-primary {
+  border-radius: 0 !important;
+  padding: 10px 20px !important;
+}
+.input-group .btn-outline-secondary {
+  border: 1px solid #cbd5e0 !important;
+  border-left: none !important;
+  border-top-right-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+  padding: 10px 20px !important;
+}
+
+/* Premium Table Override */
+.table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03), 0 2px 4px -1px rgba(0,0,0,0.02) !important;
+  background-color: #fff !important;
+  border: 1px solid #e2e8f0 !important;
+  margin-top: 15px !important;
+  margin-bottom: 25px !important;
+}
+.table thead th {
+  background-color: var(--bs-primary) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  padding: 14px 16px !important;
+  border-bottom: 2px solid rgba(0,0,0,0.08) !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.5px !important;
+  vertical-align: middle !important;
+}
+.table thead th a {
+  color: #fff !important;
+  text-decoration: none !important;
+  transition: opacity 0.15s ease;
+}
+.table thead th a:hover {
+  opacity: 0.85;
+  text-decoration: underline !important;
+}
+.table tbody td {
+  padding: 14px 16px !important;
+  border-bottom: 1px solid #edf2f7 !important;
+  color: #4a5568 !important;
+  vertical-align: middle !important;
+  font-size: 0.9rem !important;
+}
+.table tbody tr:last-child td {
+  border-bottom: none !important;
+}
+.table tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+/* Action buttons styling inside the last column (Edit | Details | Delete) */
+.table td:last-child:has(a[href*="Edit"]), 
+.table td:last-child:has(a[href*="edit"]),
+.table td:last-child:has(a[href*="Details"]), 
+.table td:last-child:has(a[href*="details"]),
+.table td:last-child:has(a[href*="Delete"]), 
+.table td:last-child:has(a[href*="delete"]) {
+  white-space: nowrap !important;
+  text-align: right !important;
+  font-size: 0 !important; /* Completely hides the ugly "|" pipe symbols */
+}
+.table td:last-child:has(a[href*="Edit"]) a,
+.table td:last-child:has(a[href*="edit"]) a,
+.table td:last-child:has(a[href*="Details"]) a,
+.table td:last-child:has(a[href*="details"]) a,
+.table td:last-child:has(a[href*="Delete"]) a,
+.table td:last-child:has(a[href*="delete"]) a {
+  font-size: 0.8rem !important;
+  display: inline-block !important;
+  margin: 2px 3px !important;
+  padding: 5px 12px !important;
+  border-radius: 30px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease-in-out !important;
+}
+.table td:last-child a[href*="Edit"], .table td:last-child a[href*="edit"] {
+  background-color: rgba(126, 145, 179, 0.1) !important;
+  color: var(--bs-primary) !important;
+  border: 1px solid rgba(126, 145, 179, 0.3) !important;
+}
+.table td:last-child a[href*="Edit"]:hover, .table td:last-child a[href*="edit"]:hover {
+  background-color: var(--bs-primary) !important;
+  color: #fff !important;
+}
+.table td:last-child a[href*="Details"], .table td:last-child a[href*="details"] {
+  background-color: rgba(136, 187, 167, 0.1) !important;
+  color: var(--bs-success) !important;
+  border: 1px solid rgba(136, 187, 167, 0.3) !important;
+}
+.table td:last-child a[href*="Details"]:hover, .table td:last-child a[href*="details"]:hover {
+  background-color: var(--bs-success) !important;
+  color: #fff !important;
+}
+.table td:last-child a[href*="Delete"], .table td:last-child a[href*="delete"] {
+  background-color: rgba(232, 165, 152, 0.1) !important;
+  color: var(--bs-danger) !important;
+  border: 1px solid rgba(232, 165, 152, 0.3) !important;
+}
+.table td:last-child a[href*="Delete"]:hover, .table td:last-child a[href*="delete"]:hover {
+  background-color: var(--bs-danger) !important;
+  color: #fff !important;
+}
+
+/* Details View Card Overrides */
+dl.row {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  border: 1px solid #e2e8f0;
+}
+dt {
+  font-weight: 700;
+  color: var(--bs-dark);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+dd {
+  color: #4a5568;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+/* Edit / Create Form Elements styling */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+.form-group label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--bs-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  display: block;
+}
+.form-group input, .form-group select {
+  border-radius: 8px !important;
+  border: 1px solid #cbd5e0 !important;
+  padding: 8px 14px !important;
+  font-size: 0.95rem !important;
+  transition: all 0.2s ease !important;
+}
+.form-group input:focus, .form-group select:focus {
+  border-color: var(--bs-primary) !important;
+  box-shadow: 0 0 0 3px rgba(126, 145, 179, 0.25) !important;
+}
+input[type="submit"].btn-primary {
+  border-radius: 30px !important;
+  padding: 8px 24px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-size: 0.85rem !important;
+  letter-spacing: 0.5px !important;
+}

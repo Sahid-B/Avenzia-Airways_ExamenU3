@@ -1,0 +1,61 @@
+@page
+@model ExternalLoginsModel
+@{
+    ViewData["Title"] = "Cuentas Externas";
+    ViewData["ActivePage"] = ManageNavPages.ExternalLogins;
+}
+<h4 class="fw-bold mb-4 border-bottom pb-2">Cuentas Externas</h4>
+
+<partial name="_StatusMessage" for="StatusMessage" />
+@if (Model.CurrentLogins?.Count > 0)
+{
+    <h5 class="fw-bold mb-3">Cuentas vinculadas</h5>
+    <div class="table-responsive mb-4">
+        <table class="table align-middle">
+            <tbody>
+                @foreach (var login in Model.CurrentLogins)
+                {
+                    <tr>
+                        <td id="@($"login-provider-{login.LoginProvider}")" class="fw-bold">@login.ProviderDisplayName</td>
+                        <td class="text-end">
+                            @if (Model.ShowRemoveButton)
+                            {
+                                <form id="@($"remove-login-{login.LoginProvider}")" asp-page-handler="RemoveLogin" method="post">
+                                    <div>
+                                        <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
+                                        <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
+                                        <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold" title="Eliminar vinculación de @login.ProviderDisplayName de tu cuenta">Desvincular</button>
+                                    </div>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Activa</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+@if (Model.OtherLogins?.Count > 0)
+{
+    <h5 class="fw-bold mb-3">Agregar otra cuenta externa</h5>
+    <form id="link-login-form" asp-page-handler="LinkLogin" method="post" class="form-horizontal">
+        <div id="socialLoginList">
+            <div class="d-flex gap-2">
+                @foreach (var provider in Model.OtherLogins)
+                {
+                    <button id="@($"link-login-button-{provider.Name}")" type="submit" class="btn btn-outline-danger rounded-pill px-4 py-2 fw-bold shadow-sm" name="provider" value="@provider.Name" title="Vincular usando tu cuenta de @provider.DisplayName">
+                        @if (provider.Name == "Google")
+                        {
+                            <i class="bi bi-google me-2"></i>
+                        }
+                        Vincular con @provider.DisplayName
+                    </button>
+                }
+            </div>
+        </div>
+    </form>
+}

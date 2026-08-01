@@ -1,0 +1,62 @@
+@model AirportApp.Models.Booking
+
+@{
+    ViewData["Title"] = "Boletos de la Reserva";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Información de la Reserva: @Model.BookRef</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-1"><strong>Fecha de Reserva:</strong> @Model.BookDate.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p class="mb-0"><strong>Monto Total original:</strong> @Model.TotalAmount.ToString("C")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mb-3 text-secondary">Boletos Emitidos</h4>
+
+    <div class="row">
+        @if (Model.Tickets != null && Model.Tickets.Any())
+        {
+            foreach (var ticket in Model.Tickets)
+            {
+                <div class="col-md-6 mb-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="card-title mb-0 font-monospace text-primary">Boleto: @ticket.TicketNo</h6>
+                                <span class="badge bg-light text-dark">Pasajero</span>
+                            </div>
+                            <p class="card-text mb-1"><strong>Nombre:</strong> @ticket.PassengerName</p>
+                            <p class="card-text mb-3"><strong>ID Pasajero:</strong> @ticket.PassengerId</p>
+                            
+                            <div class="d-grid">
+                                <a asp-action="SelectTicket" asp-route-ticketNo="@ticket.TicketNo" class="btn btn-primary">
+                                    Ver Vuelos de este Boleto
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-warning">No se encontraron boletos asociados a esta reserva.</div>
+            </div>
+        }
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            Regresar a Buscar Reserva
+        </a>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+@model AirportApp.Models.Booking
+
+@{
+    ViewData["Title"] = "Mis Boletos - Upgrade";
+}
+
+<div class="container mt-5">
+    <h2 class="fw-bold mb-4">Boletos de la Reserva: <span class="text-primary">@Model.BookRef</span></h2>
+    
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <div class="row">
+        @foreach (var ticket in Model.Tickets)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm border-0 rounded-4 h-100">
+                    <div class="card-header bg-light border-0 pt-4 pb-0">
+                        <h5 class="fw-bold"><i class="bi bi-ticket-detailed text-secondary"></i> Boleto: @ticket.TicketNo</h5>
+                        <p class="text-muted small mb-0"><i class="bi bi-person"></i> Pasajero: @ticket.PassengerName (ID: @ticket.PassengerId)</p>
+                    </div>
+                    <div class="card-body">
+                        @if (!ticket.TicketFlights.Any())
+                        {
+                            <div class="alert alert-warning">No hay vuelos asociados a este boleto.</div>
+                        }
+                        else
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var tf in ticket.TicketFlights)
+                                {
+                                    <li class="list-group-item px-0 py-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="fw-bold text-dark">Vuelo #@tf.FlightId</span>
+                                            <span class="badge @(tf.FareConditions == "Business" ? "bg-warning text-dark" : "bg-secondary") rounded-pill">
+                                                @tf.FareConditions
+                                            </span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <span class="text-success fw-bold">Pagado: $@tf.Amount.ToString("F2")</span>
+                                            
+                                            @if (tf.FareConditions != "Business")
+                                            {
+                                                <a asp-action="ConfirmUpgrade" asp-route-ticketNo="@ticket.TicketNo" asp-route-flightId="@tf.FlightId" class="btn btn-sm btn-outline-primary rounded-pill fw-bold">
+                                                    <i class="bi bi-arrow-up-circle"></i> ¡Hacer Upgrade a Business!
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-sm btn-light text-muted rounded-pill" disabled><i class="bi bi-check-circle-fill text-warning"></i> Máxima Clase</button>
+                                            }
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4"><i class="bi bi-arrow-left"></i> Volver a Buscar</a>
+    </div>
+</div>
