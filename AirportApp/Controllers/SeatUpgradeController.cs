@@ -176,14 +176,31 @@ namespace AirportApp.Controllers
             {
                 var captureResult = await _payPalService.CaptureOrderAsync(token);
 
+                object? payIdObj = null;
+                int paymentId = 0;
+                bool hasSessionData = TempData.TryGetValue("Upgrade_PaymentId", out payIdObj) && 
+                                      int.TryParse(payIdObj?.ToString(), out paymentId);
+
                 if (captureResult.Status != "COMPLETED")
                 {
+                    if (hasSessionData)
+                    {
+                        var tempPayment = await _context.Payments
+                            .Include(p => p.Order)
+                            .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
+                        if (tempPayment != null)
+                        {
+                            string finalStatus = (captureResult.Status == "DECLINED" || captureResult.Status == "FAILED" || captureResult.Status == "DENIED") ? "Rechazado" : "Fallido";
+                            tempPayment.Status = finalStatus;
+                            tempPayment.Order.Status = finalStatus;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
                     TempData["Error"] = "El pago no pudo ser completado. Estado: " + captureResult.Status;
                     return RedirectToAction(nameof(Index));
                 }
 
-                if (!TempData.TryGetValue("Upgrade_PaymentId", out var payIdObj) || 
-                    !int.TryParse(payIdObj?.ToString(), out int paymentId))
+                if (!hasSessionData)
                 {
                     return BadRequest("Datos de sesión perdidos.");
                 }

@@ -193,6 +193,7 @@ namespace AirportApp.Controllers
 
             if (order == null) return NotFound();
 
+            string finalStatus = "Failed";
             try
             {
                 var captureResult = await _payPalService.CaptureOrderAsync(token);
@@ -220,13 +221,17 @@ namespace AirportApp.Controllers
 
                     return RedirectToAction(nameof(Receipt), new { orderId = order.OrderId });
                 }
+                else if (captureResult.Status == "DECLINED" || captureResult.Status == "FAILED" || captureResult.Status == "DENIED")
+                {
+                    finalStatus = "Rechazado";
+                }
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Error al capturar el pago: " + ex.Message;
             }
 
-            order.Status = "Failed";
+            order.Status = finalStatus;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

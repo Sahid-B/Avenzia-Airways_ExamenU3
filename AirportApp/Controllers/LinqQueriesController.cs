@@ -96,8 +96,8 @@ namespace AirportApp.Controllers
                     {
                         "completed" or "aprobado" => "Aprobado",
                         "pending" or "pendiente" => "Pendiente",
-                        "failed" or "fallido" or "rechazado" => "Fallido",
-                        "refunded" or "reembolsado" => "Reembolsado",
+                        "failed" or "fallido" => "Fallido",
+                        "refunded" or "reembolsado" or "rechazado" or "declined" => "Rechazado",
                         _ => "Desconocido"
                     },
                     s.Count,

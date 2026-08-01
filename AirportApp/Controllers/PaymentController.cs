@@ -215,8 +215,9 @@ namespace AirportApp.Controllers
             }
             else
             {
-                payment.Status = "Fallido";
-                payment.Order.Status = "Fallido";
+                string finalStatus = (captureResult.Status == "DECLINED" || captureResult.Status == "FAILED" || captureResult.Status == "DENIED") ? "Rechazado" : "Fallido";
+                payment.Status = finalStatus;
+                payment.Order.Status = finalStatus;
                 await _context.SaveChangesAsync();
                 
                 ViewData["ErrorMessage"] = $"El pago de PayPal no se completó (Estado: {captureResult.Status}).";
