@@ -44,12 +44,24 @@ Se ha integrado **PayPal Sandbox** (y soporte para PayPhone) como pasarela de pa
 3. Abre tu navegador en la URL indicada (generalmente `https://localhost:7xxx`).
 
 ## 📸 Capturas Principales
-*(Nota: Reemplaza las siguientes líneas con las fotos reales de tu aplicación)*
 
-* **Inicio de Sesión:** `![Login](enlace_a_tu_imagen_login)`
-* **Proceso de Checkout y Cálculo de Precio:** `![Checkout](enlace_a_tu_imagen_checkout)`
-* **Administración (Paginación):** `![Admin](enlace_a_tu_imagen_admin)`
-* **Pasarela PayPal:** `![PayPal](enlace_a_tu_imagen_paypal)`
+A continuación se presentan capturas de pantalla del funcionamiento de la aplicación:
+
+* **Inicio de Sesión y Registro:**
+  ![Inicio de Sesión](Capturas_Principales/img1.jpeg)
+* **Pantalla de Inicio / Dashboard:**
+  ![Dashboard](Capturas_Principales/img2.jpeg)
+* **Búsqueda y Compra de Vuelos:**
+  ![Compra de Vuelos](Capturas_Principales/img3.jpeg)
+* **Selección de Clase y Checkout:**
+  ![Selección de Clase](Capturas_Principales/img4.jpeg)
+* **Pasarela de Pago PayPal (Embedded):**
+  ![Pasarela PayPal](Capturas_Principales/img5.jpeg)
+* **Administración de Vuelos y Reservas:**
+  ![Administración de Vuelos](Capturas_Principales/img6.jpeg)
+* **Reportes y Consultas LINQ Avanzadas:**
+  ![Reportes LINQ](Capturas_Principales/img7.jpeg)
+
 
 ---
 **Nota de Seguridad:** Se ha implementado un archivo `.gitignore` para excluir estrictamente las carpetas `bin/`, `obj/`, `.vs/`, y especialmente los archivos `appsettings.json` o `.env` que contengan credenciales reales o ClientSecrets, garantizando el cumplimiento de las políticas de seguridad.
