@@ -6,9 +6,12 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("Administrador"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 
 <form asp-action="Index" method="get" class="mb-3">
     <div class="input-group w-50">
@@ -52,9 +55,15 @@
                 @Html.DisplayFor(modelItem => item.RequestedFlight.FlightId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.RequestId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RequestId">Delete</a>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.RequestId">Edit</a> @:|
+                }
+                <a asp-action="Details" asp-route-id="@item.RequestId">Details</a>
+                @if (User.IsInRole("Administrador"))
+                {
+                    @:| <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn rounded-pill px-3 py-1 fw-bold shadow-sm" style="background-color: rgba(232, 165, 152, 0.1) !important; color: var(--bs-danger) !important; border: 1px solid rgba(232, 165, 152, 0.3) !important; font-size: 0.8rem !important; display: inline-block !important; margin: 2px 3px !important; text-decoration: none !important;"><i class="bi bi-trash-fill me-1"></i>Eliminar</a>
+                }
             </td>
         </tr>
 }

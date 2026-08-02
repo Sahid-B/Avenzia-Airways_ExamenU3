@@ -9,6 +9,7 @@ using AirportApp.Models;
 
 namespace AirportApp.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Administrador")]
     public class OrderDetailsController : Controller
     {
         private readonly AirportDbContext _context;

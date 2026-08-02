@@ -190,7 +190,7 @@ namespace AirportApp.Controllers
                             .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
                         if (tempPayment != null)
                         {
-                            string finalStatus = (captureResult.Status == "DECLINED" || captureResult.Status == "FAILED" || captureResult.Status == "DENIED") ? "Rechazado" : "Fallido";
+                            string finalStatus = (captureResult.Status == "DECLINED" || captureResult.Status == "FAILED" || captureResult.Status == "DENIED") ? "Denied" : "Failed";
                             tempPayment.Status = finalStatus;
                             tempPayment.Order.Status = finalStatus;
                             await _context.SaveChangesAsync();

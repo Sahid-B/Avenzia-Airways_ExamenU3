@@ -215,7 +215,7 @@ namespace AirportApp.Controllers
             }
             else
             {
-                string finalStatus = (captureResult.Status == "DECLINED" || captureResult.Status == "FAILED" || captureResult.Status == "DENIED") ? "Rechazado" : "Fallido";
+                string finalStatus = (captureResult.Status == "DECLINED" || captureResult.Status == "FAILED" || captureResult.Status == "DENIED") ? "Denied" : "Failed";
                 payment.Status = finalStatus;
                 payment.Order.Status = finalStatus;
                 await _context.SaveChangesAsync();

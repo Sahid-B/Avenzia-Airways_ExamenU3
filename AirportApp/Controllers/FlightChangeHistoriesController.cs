@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,7 @@ using AirportApp.Models;
 
 namespace AirportApp.Controllers
 {
+    [Authorize]
     public class FlightChangeHistoriesController : Controller
     {
         private readonly AirportDbContext _context;
@@ -37,11 +40,20 @@ namespace AirportApp.Controllers
             ViewData["CurrentFilter"] = searchString;
             ViewData["PageSize"] = pageSize ?? 10;
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = User.IsInRole("Administrador");
+            var truncatedUserId = userId?.Substring(0, Math.Min(20, userId.Length)) ?? "";
+
             var airportDbContext = _context.FlightChangeHistories
                 .Include(f => f.BookRefNavigation)
                 .Include(f => f.NewFlight)
                 .Include(f => f.OldFlight)
                 .AsNoTracking();
+
+            if (!isAdmin)
+            {
+                airportDbContext = airportDbContext.Where(f => f.BookRefNavigation.Tickets.Any(t => t.PassengerId == truncatedUserId));
+            }
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -76,14 +88,29 @@ namespace AirportApp.Controllers
                 return NotFound();
             }
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = User.IsInRole("Administrador");
+            var truncatedUserId = userId?.Substring(0, Math.Min(20, userId.Length)) ?? "";
+
             var flightChangeHistory = await _context.FlightChangeHistories
                 .Include(f => f.BookRefNavigation)
+                    .ThenInclude(b => b.Tickets)
                 .Include(f => f.NewFlight)
                 .Include(f => f.OldFlight)
                 .FirstOrDefaultAsync(m => m.ChangeId == id);
+
             if (flightChangeHistory == null)
             {
                 return NotFound();
+            }
+
+            if (!isAdmin)
+            {
+                var belongsToUser = flightChangeHistory.BookRefNavigation.Tickets.Any(t => t.PassengerId == truncatedUserId);
+                if (!belongsToUser)
+                {
+                    return Forbid();
+                }
             }
 
             return View(flightChangeHistory);

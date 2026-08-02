@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AirportApp.Controllers
 {
-    [Authorize(Roles = "Administrador, Cliente")]
+    [Authorize(Roles = "Administrador")]
     public class PaymentsController : Controller
     {
         private readonly AirportDbContext _context;
@@ -44,7 +44,35 @@ namespace AirportApp.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                airportDbContext = airportDbContext.Where(s => s.Status.Contains(searchString) || s.Gateway.Contains(searchString));
+                var lowerSearch = searchString.Trim().ToLower();
+                if (lowerSearch == "aprobado" || lowerSearch == "completado" || lowerSearch == "completed")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Completed") || s.Status.Contains("Aprobado") || s.Status.Contains("Completado") || s.Gateway.Contains(searchString));
+                }
+                else if (lowerSearch == "pendiente" || lowerSearch == "pending")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Pending") || s.Status.Contains("Pendiente") || s.Gateway.Contains(searchString));
+                }
+                else if (lowerSearch == "rechazado" || lowerSearch == "declined" || lowerSearch == "denied")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Rechazado") || s.Status.Contains("Declined") || s.Status.Contains("Denied") || s.Gateway.Contains(searchString));
+                }
+                else if (lowerSearch == "reembolsado" || lowerSearch == "refunded")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Refunded") || s.Status.Contains("Reembolsado") || s.Gateway.Contains(searchString));
+                }
+                else if (lowerSearch == "fallido" || lowerSearch == "failed")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Failed") || s.Status.Contains("Fallido") || s.Gateway.Contains(searchString));
+                }
+                else if (lowerSearch == "cancelado" || lowerSearch == "cancelled" || lowerSearch == "canceled")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Cancelled") || s.Status.Contains("Canceled") || s.Status.Contains("Cancelado") || s.Gateway.Contains(searchString));
+                }
+                else
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains(searchString) || s.Gateway.Contains(searchString));
+                }
             }
 
             switch (sortOrder)

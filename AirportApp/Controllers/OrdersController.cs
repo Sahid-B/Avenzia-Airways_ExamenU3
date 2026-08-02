@@ -57,7 +57,35 @@ namespace AirportApp.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                airportDbContext = airportDbContext.Where(s => s.Status.Contains(searchString));
+                var lowerSearch = searchString.Trim().ToLower();
+                if (lowerSearch == "aprobado" || lowerSearch == "completado" || lowerSearch == "completed")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Completed") || s.Status.Contains("Aprobado") || s.Status.Contains("Completado"));
+                }
+                else if (lowerSearch == "pendiente" || lowerSearch == "pending")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Pending") || s.Status.Contains("Pendiente"));
+                }
+                else if (lowerSearch == "rechazado" || lowerSearch == "declined" || lowerSearch == "denied")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Rechazado") || s.Status.Contains("Declined") || s.Status.Contains("Denied"));
+                }
+                else if (lowerSearch == "reembolsado" || lowerSearch == "refunded")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Refunded") || s.Status.Contains("Reembolsado"));
+                }
+                else if (lowerSearch == "fallido" || lowerSearch == "failed")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Failed") || s.Status.Contains("Fallido"));
+                }
+                else if (lowerSearch == "cancelado" || lowerSearch == "cancelled" || lowerSearch == "canceled")
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains("Cancelled") || s.Status.Contains("Canceled") || s.Status.Contains("Cancelado"));
+                }
+                else
+                {
+                    airportDbContext = airportDbContext.Where(s => s.Status.Contains(searchString));
+                }
             }
 
             switch (sortOrder)

@@ -223,7 +223,7 @@ namespace AirportApp.Controllers
                 }
                 else if (captureResult.Status == "DECLINED" || captureResult.Status == "FAILED" || captureResult.Status == "DENIED")
                 {
-                    finalStatus = "Rechazado";
+                    finalStatus = "Denied";
                 }
             }
             catch (Exception ex)
